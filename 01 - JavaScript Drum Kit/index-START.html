@@ -58,6 +58,23 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
   <script>
+    function playSound(event) {
+      const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`);
+      const keyBox = document.querySelector(`div[data-key="${event.keyCode}"]`);
+      if(!audio) return;
+      keyBox.classList.add('playing');
+      audio.currentTime = 0;
+      audio.play();
+    }
+
+    function removeTransition(event) {
+      if (event.propertyName !== 'transform') return; //css里写了过渡transform scale
+      event.target.classList.remove('playing');
+    }
+
+    const keys = Array.from(document.querySelectorAll('.key')); //Array.from - 方法对一个类似数组或可迭代对象创建一个新的，浅拷贝的数组实例。
+    keys.forEach(key => key.addEventListener('transitionend',removeTransition)); //transition end
+    window.addEventListener('keydown',playSound);
 
   </script>
 
