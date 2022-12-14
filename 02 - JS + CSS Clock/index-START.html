@@ -61,13 +61,111 @@
       background:black;
       position: absolute;
       top:50%;
+      right: 50%; /*as the length of each pointer are different, need to set this style to let thier end of the right side in same position*/
+      transform: rotate(90deg); /*pointers start horizontally -> vertically */
+      transform-origin: 100%; /* set rotate center to the right end of pointers */
+      
+      /*for the transform of the first loading*/
+      transition-timing-function: cubic-bezier(0.9, 0.54, 0.26, 1.68); /*specify the speed of the switching effect */
+    }
+
+    .clock-face:after {
+        width: 1em;
+        height: 1em;
+        left: 50%;
+        top: 50%;
+        position: absolute;
+        display: block;
+        content: '';
+        background-color: black;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .hour-hand {
+      width: 40%;
+      border-bottom-left-radius: .5rem;
+      border-top-left-radius: .5rem;
+      transition: all 3s; 
+    }
+
+    .min-hand {
+      width: 45%;
+      height: 4px;
+      transition: all 0.1s;
+    }
+
+    .second-hand {
+      height: 2px;
+      border-bottom-left-radius: 100%;
+      border-top-left-radius: 100%;
+      background-color: red;
+      transition: all .05s cubic-bezier(0.9, 0.54, 0.26, 1.68); /* transition time should be set ahead of timing function */
     }
 
   </style>
 
   <script>
+    const secondHand = document.querySelector('.second-hand');
+    const minHand = document.querySelector('.min-hand');
+    const hourHand = document.querySelector('.hour-hand');
 
+    function setDate() {
+      const now = new Date();
+      const second = now.getSeconds();
+      const secondDegree = ((second / 60)*360)+90; /* as pointer start at rotate(90deg) */
+      
+      const min = now.getMinutes();
+      const minDegree = ((min / 60) * 360) + 90;
+     
+      const hour = now.getHours();
+      const hourDegree = (hour / 12) * 360 + (min / 12 / 60) * 360 + 90; /* make hour hand move slowly over time */
+     
+      // Way1 to solve pointer rotates counterclockwise and then clockwise when it at 90deg
+      if (secondDegree === 90) secondHand.style.transition = 'all 0s';
+      else secondHand.style.transition = 'all 0.05s cubic-bezier(0.9, 0.54, 0.26, 1.68)';
+      
+      if (minDegree === 90) minHand.style.transition = 'all 0s';
+      else minHand.style.transition = 'all 0.1s cubic-bezier(0.9, 0.54, 0.26, 1.68)';
 
+      secondHand.style.transform = `rotate(${secondDegree}deg)`;
+      minHand.style.transform = `rotate(${minDegree}deg)`;
+      hourHand.style.transform = `rotate(${hourDegree}deg)`;
+    }
+
+    setInterval(setDate, 1000);
+  </script>
+
+  <script>
+    // Way2 to solve pointer rotates counterclockwise and then clockwise when it at 90deg
+    // only use Date() at the beginning, and then calculate degree directly
+
+    let secondDegree = 0;
+    let minDegree = 0;
+    let hourDegree = 0;
+
+    function initDate() {
+      const date = new Date();
+      const second = date.getSeconds();
+      secondDegree = 90 + (second / 60) * 360;
+      const min = date.getMinutes();
+      minDegree = 90 + (min / 60) * 360 + ((second / 60) / 60) * 360;
+      const hour = date.getHours();
+      hourDegree = 90 + (hour / 12) * 360 + ((min / 60) / 12) * 360 + (((second / 60) / 60) / 12) * 360;
+    }
+
+    function updateDate() {
+      secondDegree += ( 1 / 60 ) * 360;
+      minDegree += ((1 / 60) / 60) * 360;
+      hourDegree += ((1 / 60) / 60 / 12) * 360;
+
+      secondHand.style.transform = `rotate(${secondDegree}deg)`;
+      minHand.style.transform = `rotate(${minDegree}deg)`;
+      hourHand.style.transform = `rotate(${hourDegree}deg)`;
+
+    }
+    // initDate()
+    // setInterval(updateDate, 1000);
   </script>
 </body>
 </html>
