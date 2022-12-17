@@ -24,6 +24,8 @@
     .panels {
       min-height:100vh;
       overflow: hidden;
+
+      display: flex;
     }
 
     .panel {
@@ -41,6 +43,12 @@
       font-size: 20px;
       background-size:cover;
       background-position:center;
+
+      flex: 1;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      flex-direction: column;
     }
 
 
@@ -53,7 +61,41 @@
     .panel > * {
       margin:0;
       width: 100%;
-      transition:transform 0.5s;
+      /*text transform (origin)*/
+      /* transition:transform 0.5s; */
+
+      /* optimise: delay text transition */
+      transition: transform 0.5s 0.7s;
+
+      flex: 1 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .panel > *:first-child {
+      transform: translateY(-100%);
+    }
+
+    .panel > *:last-child {
+      transform: translateY(100%);
+    }
+
+
+    /* .panel.open-actived > *:first-child {
+		  transform: translateY(0);
+	  }
+    .panel.open-actived > *:last-child {
+		  transform: translateY(0);
+	  } */
+
+    /*optimise: .open-actived -> .open, use only one eventListener*/
+    .panel.open > *:first-child {
+      transform: translateY(0);
+    }
+
+    .panel.open > *:last-child {
+      transform: translateY(0);
     }
 
     .panel p {
@@ -67,6 +109,8 @@
     }
 
     .panel.open {
+      flex: 5;
+
       font-size:40px;
     }
 
@@ -107,7 +151,24 @@
   </div>
 
   <script>
+    const panels = document.querySelectorAll('.panel');
 
+    function toggleOpen() {
+      this.classList.toggle('open');
+    }
+
+    // function toggleText(e) {
+    //   // console.log(e.propertyName);
+    //   if (e.propertyName.includes('flex')){
+    //     this.classList.toggle('open-actived');
+    //   }
+    // }
+
+    // panels.forEach(panel => panel.addEventListener('click',toggleOpen));
+    // panels.forEach(panel => panel.addEventListener('transitionend', toggleText)); // text transform progress after box opened
+
+    // optimise: use one eventlinstener
+    panels.forEach(panel => panel.addEventListener('click',toggleOpen,false));
   </script>
 
 
