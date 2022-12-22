@@ -18,29 +18,70 @@
     }
 
     // Regular
+    console.log('hello world');
 
     // Interpolated
+    console.log('I am string %s', 'log');
+    console.log('I am int %d', '1.23');
+    console.log('I am object %o' ,{apple: '1kg'});
 
     // Styled
+    console.log('%c This text have the styled that set behind',"color: #00fdff; font-size: 2em;");
 
     // warning!
+    console.warn('This is warnning log');
 
     // Error :|
+    console.error('This is error log');
 
     // Info
+    console.info('This is info log');
 
     // Testing
+    console.assert(1===1,'only show this message when return false');
+    console.assert(1===0,'only show this message when return false 2');
+
+    const p = document.querySelector('p');
+    console.assert(p.innerHTML.match('T'),'can not find this alphabet');
 
     // clearing
+    // console.clear();
 
     // Viewing DOM Elements
+    console.log(p); // html tag
+    console.dir(p); // list of attributes
 
     // Grouping together
+    dogs.forEach(dog => {
+      console.group();
+      // console.groupCollapsed(); 
+      console.log(`${dog.name}`);
+      console.log(`${dog.age}`);
+      console.log(`${dog.name} is ${dog.age} years old`);
+      console.groupEnd();
+    });
+
+    console.table(dogs);
+    console.table(dogs, ["age"]);
 
     // counting
+    console.count("sheep");
+    console.count("sheep");
+    console.count("fish");
+    console.count("sheep");
+    console.count("sheep");
+    console.count("fish");
+    console.count("fish");
+    console.count("sheep");
 
     // timing
-
+    console.time('fetch my data');
+    fetch("https://api.github.com/users/lchungy90")
+      .then(data => data.json())
+      .then(data => {
+        console.timeEnd('fetch my data');
+        console.log(data);
+      });
   </script>
 </body>
 </html>
