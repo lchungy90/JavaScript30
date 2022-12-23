@@ -104,6 +104,33 @@
   </div>
 
 <script>
+  const boxes = document.querySelectorAll('.inbox input[type="checkbox"]');
+  const boxArr = Array.from(boxes);
+
+  let lastChecked;
+  let onOff = false;
+
+  function handleCheck(e){
+    if (!lastChecked) lastChecked = this;
+    onOff = lastChecked.checked ? true : false;
+
+    if(e.shiftKey){
+      let start = boxArr.indexOf(this); // if press shift key and check a box, note this box as start box
+
+      // as the process of selecting boxes at same time is: click a box -> press shift key -> click another box
+      // the lastChecked is the box which will be selected in first step  [lastChecked  -  start]
+      let end = boxArr.indexOf(lastChecked); 
+
+      // slice(start,end(not include))
+      boxArr.slice(Math.min(start,end),Math.max(start,end)+1).forEach(input => input.checked = onOff);
+    }
+    lastChecked = this;
+
+
+  }
+
+  boxes.forEach(box => box.addEventListener('click',handleCheck));
+
 </script>
 </body>
 </html>
