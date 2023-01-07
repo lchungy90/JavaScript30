@@ -5,6 +5,7 @@
   <title>Videos</title>
 </head>
 <body>
+  <p>total time：<span id="totaltime"></span></p>
   <ul class="videos">
     <li data-time="5:43">
       Video 1
@@ -182,6 +183,26 @@
     </li>
   </ul>
 <script>
+function getTime(){
+  let times = [];
+  let lists = document.getElementsByTagName('li');
+  for(let i=0; i<lists.length; i++){
+    let itemTime = lists[i].dataset['time'].split(':');
+    times.push(parseInt(itemTime[0],10)*60 + parseInt(itemTime[1],10));
+  }
+  return times.reduce(function(a,b){return a+b},0);
+}
+
+function formatTime(seconds){
+  let sec = seconds % 60;
+  let hour = Math.floor(seconds/3600);
+  let min = (seconds - 3600*hour - sec)/60;
+  document.getElementById('totaltime').innerHTML = `${hour}:${min}:${sec}`;
+}
+
+let totalTime = getTime();
+formatTime(totalTime);
+
 </script>
 </body>
 </html>
